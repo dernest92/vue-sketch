@@ -9,6 +9,18 @@
       @mousemove="continueStroke($event)"
       @touchmove="continueStroke($event)"
     ></canvas>
+    <div class="buttons">
+      <button @click="back">Back</button>
+      <button @click="clear">Clear</button>
+      <button @click="drawStrokes">Redraw</button>
+    </div>
+    <div class="size-control">
+      <input v-model="size" type="range" min="1" max="20">
+      <div
+        class="brush-sample"
+        :style="{background: color, height: (size + 'px'), width: (size + 'px'), 'border-radius': '50%'}"
+      ></div>
+    </div>
   </div>
 </template>
 
@@ -21,12 +33,23 @@ export default {
       canvas: undefined,
       context: undefined,
       mouseX: 0,
-      mouseY: 0
+      mouseY: 0,
+      color: "#00bbcc",
+      size: 5
     };
   },
   methods: {
+    back() {
+      this.strokes.pop();
+      this.drawStrokes();
+      console.log(this.strokes);
+    },
+    clear() {
+      this.strokes = [];
+      this.drawStrokes();
+    },
     setPosition(e) {
-      const { top, left } = canvas.getBoundingClientRect();
+      const { top, left } = this.canvas.getBoundingClientRect();
       this.mouseX = e.changedTouches
         ? e.changedTouches[0].pageX - left
         : e.offsetX;
@@ -35,22 +58,32 @@ export default {
         : e.offsetY;
     },
     startStroke(e) {
-      console.log("start stroke");
+      this.setPosition(e);
       this.isDrawing = true;
+      const stroke = {
+        x: [this.mouseX],
+        y: [this.mouseY],
+        stokeColor: this.color,
+        strokeSize: this.size
+      };
+      this.strokes.push(stroke);
+      this.drawStrokes();
     },
     continueStroke(e) {
       if (this.isDrawing) {
-        console.log("continue stroke");
+        this.setPosition(e);
+        this.strokes[this.strokes.length - 1].x.push(this.mouseX);
+        this.strokes[this.strokes.length - 1].y.push(this.mouseY);
+        this.drawStrokes();
       }
     },
     endStroke() {
-      console.log("end stroke");
       this.isDrawing = false;
     },
     drawStrokes() {
       const canvas = this.canvas;
       const context = this.context;
-
+      context.clearRect(0, 0, context.canvas.width, context.canvas.height);
       this.strokes.forEach(stroke => {
         context.strokeStyle = stroke.strokeColor;
         context.lineJoin = "round";
