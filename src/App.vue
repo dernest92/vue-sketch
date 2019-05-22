@@ -25,7 +25,6 @@ export default {
 }
 
 #sketch-pad {
-  border: 1px #333 solid;
   position: fixed;
   top: 0;
   bottom: 0;
@@ -37,5 +36,9 @@ export default {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+}
+
+body {
+  background: #ff9770;
 }
 </style>

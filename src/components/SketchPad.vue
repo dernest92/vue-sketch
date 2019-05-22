@@ -1,25 +1,43 @@
 <template>
-  <div @mouseup="endStroke" @touchend="endStroke">
-    <h1>draw</h1>
-    <canvas
-      id="sketch-area"
-      ref="my-canvas"
-      @mousedown="startStroke($event)"
-      @touchstart="startStroke($event)"
-      @mousemove="continueStroke($event)"
-      @touchmove="continueStroke($event)"
-    ></canvas>
-    <div class="buttons">
-      <button @click="back">Back</button>
-      <button @click="clear">Clear</button>
-      <button @click="drawStrokes">Redraw</button>
-    </div>
-    <div class="size-control">
-      <input v-model="size" type="range" min="1" max="20">
-      <div
-        class="brush-sample"
-        :style="{background: color, height: (size + 'px'), width: (size + 'px'), 'border-radius': '50%'}"
-      ></div>
+  <div class="container" @mouseup="endStroke" @touchend="endStroke">
+    <div class="card">
+      <canvas
+        id="sketch-area"
+        ref="my-canvas"
+        height="400"
+        width="350"
+        @mousedown="startStroke($event)"
+        @touchstart="startStroke($event)"
+        @mousemove="continueStroke($event)"
+        @touchmove="continueStroke($event)"
+      ></canvas>
+      <div class="buttons">
+        <button class="btn" @click="back" :disabled="!canUndo">
+          <i class="fas fa-undo fa-lg"></i>
+        </button>
+        <button class="btn" @click="clear">
+          <i class="fas fa-recycle fa-lg"></i>
+        </button>
+        <button class="btn" @click="redo" :disabled="!canRedo">
+          <i class="fas fa-redo fa-lg"></i>
+        </button>
+      </div>
+      <div class="toolbar">
+        <div class="brush-controls">
+          <div class="color-control">
+            <input type="color" v-model="color">
+          </div>
+          <div class="size-control">
+            <input v-model="size" type="range" min="1" max="40">
+          </div>
+        </div>
+        <div class="brush-sample-contianer">
+          <div
+            class="brush-sample"
+            :style="{background: color, height: (size + 'px'), width: (size + 'px'), 'border-radius': '50%'}"
+          ></div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -34,15 +52,29 @@ export default {
       context: undefined,
       mouseX: 0,
       mouseY: 0,
-      color: "#00bbcc",
-      size: 5
+      color: "#333333",
+      size: 10,
+      deletedStrokes: []
     };
   },
+  computed: {
+    canUndo() {
+      return this.strokes.length > 0;
+    },
+    canRedo() {
+      return this.deletedStrokes.length > 0;
+    }
+  },
   methods: {
-    back() {
-      this.strokes.pop();
+    redo() {
+      const revived = this.deletedStrokes.pop();
+      this.strokes.push(revived);
       this.drawStrokes();
-      console.log(this.strokes);
+    },
+    back() {
+      const removed = this.strokes.pop();
+      this.deletedStrokes.push(removed);
+      this.drawStrokes();
     },
     clear() {
       this.strokes = [];
@@ -58,12 +90,13 @@ export default {
         : e.offsetY;
     },
     startStroke(e) {
+      this.deletedStrokes = [];
       this.setPosition(e);
       this.isDrawing = true;
       const stroke = {
         x: [this.mouseX],
         y: [this.mouseY],
-        stokeColor: this.color,
+        strokeColor: this.color,
         strokeSize: this.size
       };
       this.strokes.push(stroke);
@@ -113,9 +146,75 @@ export default {
 };
 </script>
 
-<style scoped>
+
+<style lang="scss" scoped>
 #sketch-area {
-  border: 1px #333 solid;
+  background: #fff;
+  border: 1px #ccc dotted;
+  border-radius: 5px;
+  cursor: crosshair;
+}
+
+.brush-controls {
+  width: 100%;
+}
+
+.toolbar {
+  display: grid;
+  grid-template-columns: auto 75px;
+  justify-items: center;
+  align-items: center;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  // background: #444857;
+  // background: #1e1f26;
+  background: #f4f4f4;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.2);
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 10px;
+}
+
+.brush-sample-contianer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ccc;
+  height: 100%;
+  width: 100%;
+  border-radius: 5px;
+}
+
+.btn {
+  border: none;
+  background: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  padding: 5px;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  color: #333;
+  transition: all 0.35s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: auto;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0);
+  }
 }
 </style>
-
