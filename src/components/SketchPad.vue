@@ -104,6 +104,7 @@ export default {
     },
     continueStroke(e) {
       if (this.isDrawing) {
+        e.preventDefault();
         this.setPosition(e);
         this.strokes[this.strokes.length - 1].x.push(this.mouseX);
         this.strokes[this.strokes.length - 1].y.push(this.mouseY);
