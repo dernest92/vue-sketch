@@ -68,7 +68,8 @@ export default {
         "#008000",
         "#0000ff",
         "#4b0082",
-        "#333333"
+        "#333333",
+        "#ffffff"
       ]
     };
   },
@@ -237,10 +238,20 @@ export default {
   }
 
   &.color-option {
-    height: 30px;
-    width: 30px;
-    border-radius: 30%;
-    margin: 3px;
+    height: 35px;
+    width: 28px;
+    border-radius: 8px;
+    margin: 2px;
+  }
+}
+
+.size-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  input {
+    width: 100%;
   }
 }
 </style>
