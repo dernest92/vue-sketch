@@ -144,8 +144,10 @@ export default {
       }
     },
     endStroke() {
+      if (this.isDrawing) {
+        this.$socket.emit("sendStroke", this.strokes[this.strokes.length - 1]);
+      }
       this.isDrawing = false;
-      this.$socket.emit("sendStroke", this.strokes[this.strokes.length - 1]);
     },
     drawStrokes() {
       const canvas = this.canvas;
