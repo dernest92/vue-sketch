@@ -90,6 +90,7 @@ export default {
     },
     recieveClearStrokes() {
       this.strokes = [];
+      this.deletedStrokes = [];
       this.drawStrokes();
     },
     recieveRemoveStroke() {
