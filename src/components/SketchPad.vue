@@ -25,7 +25,13 @@
       <div class="toolbar">
         <div class="brush-controls">
           <div class="color-control">
-            <input type="color" v-model="color">
+            <button
+              class="btn color-option"
+              v-for="color in colorOptions"
+              @click="setColor(color)"
+              :key="color"
+              :style="{background: color}"
+            ></button>
           </div>
           <div class="size-control">
             <input v-model="size" type="range" min="1" max="40">
@@ -54,7 +60,16 @@ export default {
       mouseY: 0,
       color: "#333333",
       size: 10,
-      deletedStrokes: []
+      deletedStrokes: [],
+      colorOptions: [
+        "#ff0000",
+        "#ffa500",
+        "#ffff00",
+        "#008000",
+        "#0000ff",
+        "#4b0082",
+        "#333333"
+      ]
     };
   },
   computed: {
@@ -66,6 +81,9 @@ export default {
     }
   },
   methods: {
+    setColor(color) {
+      this.color = color;
+    },
     redo() {
       const revived = this.deletedStrokes.pop();
       this.strokes.push(revived);
@@ -216,6 +234,13 @@ export default {
     opacity: 0.5;
     cursor: auto;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0);
+  }
+
+  &.color-option {
+    height: 30px;
+    width: 30px;
+    border-radius: 30%;
+    margin: 3px;
   }
 }
 </style>
