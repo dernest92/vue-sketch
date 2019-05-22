@@ -40,7 +40,7 @@
         <div class="brush-sample-contianer">
           <div
             class="brush-sample"
-            :style="{background: color, height: (size + 'px'), width: (size + 'px'), 'border-radius': '50%'}"
+            :style="{background: color, height: (size + 'px'), width: (size + 'px')}"
           ></div>
         </div>
       </div>
@@ -97,6 +97,7 @@ export default {
     },
     clear() {
       this.strokes = [];
+      this.deletedStrokes = [];
       this.drawStrokes();
     },
     setPosition(e) {
@@ -181,7 +182,7 @@ export default {
 
 .toolbar {
   display: grid;
-  grid-template-columns: auto 75px;
+  grid-template-columns: auto 60px;
   justify-items: center;
   align-items: center;
 }
@@ -197,8 +198,8 @@ export default {
   // background: #444857;
   // background: #1e1f26;
   background: #f4f4f4;
-  padding: 10px;
-  border-radius: 10px;
+  padding: 5px;
+  border-radius: 8px;
   box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.2);
 }
 
@@ -206,7 +207,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  padding: 10px;
+  padding: 5px;
 }
 
 .brush-sample-contianer {
@@ -217,15 +218,19 @@ export default {
   height: 100%;
   width: 100%;
   border-radius: 5px;
+  box-shadow: inset 1px 1px 4px rgba(0, 0, 0, 0.2);
+
+  .brush-sample {
+    border-radius: 50%;
+  }
 }
 
 .btn {
   border: none;
   background: rgba(0, 0, 0, 0.2);
   cursor: pointer;
-  padding: 5px;
-  height: 40px;
-  width: 40px;
+  height: 35px;
+  width: 35px;
   border-radius: 50%;
   color: #333;
   transition: all 0.35s;
@@ -238,18 +243,23 @@ export default {
   }
 
   &.color-option {
-    height: 35px;
-    width: 28px;
+    height: 25px;
+    width: 25px;
     border-radius: 8px;
     margin: 2px;
   }
+}
+
+.color-control {
+  display: flex;
+  justify-content: space-evenly;
 }
 
 .size-control {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
+  padding: 5px 10px;
   input {
     width: 100%;
   }
