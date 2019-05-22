@@ -15,7 +15,7 @@
         <button class="btn" @click="back" :disabled="!canUndo">
           <i class="fas fa-undo fa-lg"></i>
         </button>
-        <button class="btn" @click="clear">
+        <button class="btn" @click="clear" :disabled="!canUndo">
           <i class="fas fa-recycle fa-lg"></i>
         </button>
         <button class="btn" @click="redo" :disabled="!canRedo">
@@ -72,6 +72,18 @@ export default {
         "#ffffff"
       ]
     };
+  },
+  sockets: {
+    connect() {
+      console.log("connected");
+    },
+    msgToClients(msg) {
+      console.log(msg);
+    },
+    recieveStroke(stroke) {
+      this.strokes.push(stroke);
+      this.drawStrokes();
+    }
   },
   computed: {
     canUndo() {
@@ -133,6 +145,7 @@ export default {
     },
     endStroke() {
       this.isDrawing = false;
+      this.$socket.emit("sendStroke", this.strokes[this.strokes.length - 1]);
     },
     drawStrokes() {
       const canvas = this.canvas;
