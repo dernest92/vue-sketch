@@ -12,7 +12,7 @@
         @touchmove="continueStroke($event)"
       ></canvas>
       <div class="buttons">
-        <button class="btn" @click="back" :disabled="!canUndo">
+        <button class="btn" @click="back(true)" :disabled="!canUndo">
           <i class="fas fa-undo fa-lg"></i>
         </button>
         <button class="btn" @click="clear" :disabled="!canUndo">
@@ -83,6 +83,17 @@ export default {
     recieveStroke(stroke) {
       this.strokes.push(stroke);
       this.drawStrokes();
+    },
+    recieveStrokes(strokes) {
+      this.strokes = [...strokes];
+      this.drawStrokes();
+    },
+    recieveClearStrokes() {
+      this.strokes = [];
+      this.drawStrokes();
+    },
+    recieveRemoveStroke() {
+      this.back(false);
     }
   },
   computed: {
@@ -100,16 +111,19 @@ export default {
     redo() {
       const revived = this.deletedStrokes.pop();
       this.strokes.push(revived);
+      this.$socket.emit("sendStroke", revived);
       this.drawStrokes();
     },
-    back() {
+    back(sendSocket) {
       const removed = this.strokes.pop();
       this.deletedStrokes.push(removed);
+      if (sendSocket) this.$socket.emit("sendRemoveStroke");
       this.drawStrokes();
     },
     clear() {
       this.strokes = [];
       this.deletedStrokes = [];
+      this.$socket.emit("sendClearStrokes");
       this.drawStrokes();
     },
     setPosition(e) {
