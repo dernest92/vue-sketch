@@ -12,7 +12,7 @@
         @touchmove="continueStroke($event)"
       ></canvas>
       <div class="buttons">
-        <button class="btn" @click="exit">
+        <button class="btn" @click="goToPage('join-type')">
           <i class="fas fa-door-open fa-lg"></i>
         </button>
         <button class="btn" @click="back(true)" :disabled="!canUndo">
@@ -112,8 +112,8 @@ export default {
     }
   },
   methods: {
-    exit() {
-      console.log("exit");
+    goToPage(page) {
+      this.$emit("goToPage", page);
     },
     setColor(color) {
       this.color = color;

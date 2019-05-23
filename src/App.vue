@@ -1,30 +1,66 @@
 <template>
   <div id="app">
-    <SketchPad v-if="isLoggedIn" id="sketch-pad" class="content-area" :board="board"/>
-    <WelcomeCard v-else class="content-area" @goToBoard="goToBoard"/>
+    <SketchPad
+      v-if="showPage === 'sketch-pad'"
+      id="sketch-pad"
+      class="content-area"
+      @goToPage="goToPage"
+      :board="board"
+    />
+    <WelcomeCard v-if="showPage === 'enter-name'" class="content-area" @goToPage="goToPage"/>
+    <JoinType v-if="showPage === 'join-type'" @goToPage="goToPage" class="content-area"/>
+    <NewBoard
+      v-if="showPage === 'new-board'"
+      @goToPage="goToPage"
+      class="content-area"
+      @goToBoard="goToBoard"
+    />
+    <ExistingBoards
+      v-if="showPage === 'existing-boards'"
+      class="content-area"
+      :boardNames="boardNames"
+      @goToPage="goToPage"
+      @goToBoard="goToBoard"
+    />
   </div>
 </template>
 
 <script>
 import SketchPad from "./components/SketchPad.vue";
 import WelcomeCard from "./components/WelcomeCard.vue";
+import JoinType from "./components/JoinType.vue";
+import NewBoard from "./components/NewBoard.vue";
+import ExistingBoards from "./components/ExistingBoards.vue";
 import storage from "./localstorage.js";
 export default {
   name: "app",
   components: {
     SketchPad,
-    WelcomeCard
+    WelcomeCard,
+    JoinType,
+    NewBoard,
+    ExistingBoards
+  },
+  sockets: {
+    newBoardCreated(boardName) {
+      this.boardNames.push(boardName);
+    }
   },
   data() {
     return {
       isLoggedIn: false,
-      board: undefined
+      board: undefined,
+      showPage: "enter-name",
+      boardNames: []
     };
   },
   methods: {
     goToBoard(board) {
       this.isLoggedIn = true;
       this.board = board;
+    },
+    goToPage(page) {
+      this.showPage = page;
     }
   },
   created() {
@@ -32,11 +68,15 @@ export default {
     if (!user) {
       this.isLoggedIn = false;
     }
+
+    this.$socket.emit("getBoardNames", boardNames => {
+      this.boardNames = boardNames;
+    });
   }
 };
 </script>
 
-<style>
+<style lang="scss">
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -61,5 +101,70 @@ export default {
 
 body {
   background: #ff9770;
+}
+
+input {
+  font-size: 16px;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  background: #f4f4f4;
+  padding: 5px;
+  border-radius: 8px;
+  box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.2);
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 5px;
+}
+
+.btn {
+  border: none;
+  background: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  color: #333;
+  transition: all 0.35s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: auto;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0);
+  }
+
+  &.color-option {
+    height: 25px;
+    width: 25px;
+    border-radius: 8px;
+    margin: 2px;
+  }
+}
+
+.color-control {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.join-option {
+  display: block;
+  max-width: 300px;
+  width: 70vw;
+  background: #fff;
+  margin: 15px;
+  padding: 20px 10px;
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
 }
 </style>
