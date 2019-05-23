@@ -10,7 +10,7 @@ const url = process.env.VUE_APP_SOCKET_URL;
 
 Vue.use(
   new VueSocketIO({
-    debug: true,
+    debug: false,
     connection: url
   })
 );

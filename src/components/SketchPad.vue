@@ -12,6 +12,9 @@
         @touchmove="continueStroke($event)"
       ></canvas>
       <div class="buttons">
+        <button class="btn" @click="exit">
+          <i class="fas fa-door-open fa-lg"></i>
+        </button>
         <button class="btn" @click="back(true)" :disabled="!canUndo">
           <i class="fas fa-undo fa-lg"></i>
         </button>
@@ -50,6 +53,9 @@
 
 <script>
 export default {
+  props: {
+    board: String
+  },
   data() {
     return {
       isDrawing: false,
@@ -106,25 +112,31 @@ export default {
     }
   },
   methods: {
+    exit() {
+      console.log("exit");
+    },
     setColor(color) {
       this.color = color;
     },
     redo() {
       const revived = this.deletedStrokes.pop();
       this.strokes.push(revived);
-      this.$socket.emit("sendStroke", revived);
+      this.$socket.emit("sendStroke", {
+        boardName: this.board,
+        stroke: revived
+      });
       this.drawStrokes();
     },
     back(sendSocket) {
       const removed = this.strokes.pop();
       this.deletedStrokes.push(removed);
-      if (sendSocket) this.$socket.emit("sendRemoveStroke");
+      if (sendSocket) this.$socket.emit("sendRemoveStroke", this.board);
       this.drawStrokes();
     },
     clear() {
       this.strokes = [];
       this.deletedStrokes = [];
-      this.$socket.emit("sendClearStrokes");
+      this.$socket.emit("sendClearStrokes", this.board);
       this.drawStrokes();
     },
     setPosition(e) {
@@ -160,7 +172,10 @@ export default {
     },
     endStroke() {
       if (this.isDrawing) {
-        this.$socket.emit("sendStroke", this.strokes[this.strokes.length - 1]);
+        this.$socket.emit("sendStroke", {
+          boardName: this.board,
+          stroke: this.strokes[this.strokes.length - 1]
+        });
       }
       this.isDrawing = false;
     },
@@ -191,7 +206,10 @@ export default {
     this.$nextTick(() => {
       this.canvas = this.$refs["my-canvas"];
       this.context = this.canvas.getContext("2d");
-      this.drawStrokes();
+      this.$socket.emit("joinBoard", this.board, (err, strokes) => {
+        this.strokes = strokes;
+        this.drawStrokes();
+      });
     });
   }
 };
@@ -225,8 +243,6 @@ export default {
 }
 
 .card {
-  // background: #444857;
-  // background: #1e1f26;
   background: #f4f4f4;
   padding: 5px;
   border-radius: 8px;
@@ -257,7 +273,7 @@ export default {
 
 .btn {
   border: none;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(256, 256, 256, 0.5);
   cursor: pointer;
   height: 35px;
   width: 35px;

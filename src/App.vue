@@ -1,16 +1,37 @@
 <template>
   <div id="app">
-    <SketchPad id="sketch-pad"/>
+    <SketchPad v-if="isLoggedIn" id="sketch-pad" class="content-area" :board="board"/>
+    <WelcomeCard v-else class="content-area" @goToBoard="goToBoard"/>
   </div>
 </template>
 
 <script>
 import SketchPad from "./components/SketchPad.vue";
-
+import WelcomeCard from "./components/WelcomeCard.vue";
+import storage from "./localstorage.js";
 export default {
   name: "app",
   components: {
-    SketchPad
+    SketchPad,
+    WelcomeCard
+  },
+  data() {
+    return {
+      isLoggedIn: false,
+      board: undefined
+    };
+  },
+  methods: {
+    goToBoard(board) {
+      this.isLoggedIn = true;
+      this.board = board;
+    }
+  },
+  created() {
+    const user = storage.getUser();
+    if (!user) {
+      this.isLoggedIn = false;
+    }
   }
 };
 </script>
@@ -24,7 +45,7 @@ export default {
   color: #2c3e50;
 }
 
-#sketch-pad {
+.content-area {
   position: fixed;
   top: 0;
   bottom: 0;
