@@ -128,6 +128,7 @@ input {
 }
 
 .card {
+  position: relative;
   background: #f4f4f4;
   padding: 5px;
   border-radius: 8px;
