@@ -1,6 +1,7 @@
 <template>
   <div class="container" @mouseup="endStroke" @touchend="endStroke">
     <div class="card card-sketch">
+      <div v-show="showPallet" class="shadow-overlay" @click="setPallet(false)"></div>
       <canvas
         id="sketch-area"
         ref="my-canvas"
@@ -10,7 +11,6 @@
         @touchstart="startStroke($event)"
         @mousemove="continueStroke($event)"
         @touchmove="continueStroke($event)"
-        @click="setPallet(false)"
       ></canvas>
 
       <div class="toolbar">
@@ -46,7 +46,7 @@
           ></button>
         </div>
         <div class="range-inputs">
-          <input v-model="opacity" type="range" min="1" max="255">
+          <!-- <input v-model="opacity" type="range" min="1" max="255"> -->
           <input v-model="size" type="range" min="1" max="50">
         </div>
         <div class="brush-prev" @click="setPallet(false)">
@@ -347,14 +347,14 @@ export default {
 }
 
 .brush-sample-contianer {
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #ccc;
+  background: #ddd;
   height: 50px;
   width: 100%;
   border-radius: 5px;
-  box-shadow: inset 1px 1px 4px rgba(0, 0, 0, 0.2);
 }
 
 .brush-sample {
@@ -410,17 +410,28 @@ export default {
 }
 
 .brush-prev {
-  background-image: linear-gradient(
-      rgba(255, 255, 255, 0.8),
-      rgba(255, 255, 255, 0.8)
-    ),
-    url("../assets/checkered.png");
+  // background-image: linear-gradient(
+  //     rgba(255, 255, 255, 0.8),
+  //     rgba(255, 255, 255, 0.8)
+  //   ),
+  //   url("../assets/checkered.png");
 
-  background-size: cover, cover;
+  // background-size: cover, cover;
+  background: #ddd;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 5px;
-  box-shadow: inset 1px 1px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.shadow-overlay {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  left: 0;
+  top: 0;
+  border-radius: 5px;
 }
 </style>

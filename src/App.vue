@@ -169,8 +169,8 @@ input {
   }
 
   &.color-option {
-    height: 25px;
-    width: 25px;
+    height: 30px;
+    width: 30px;
     border-radius: 8px;
     margin: 2px;
   }
