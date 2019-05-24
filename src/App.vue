@@ -8,6 +8,7 @@
       @refresh="setBoardNames"
       :board="board"
       :user="user"
+      :users="users"
     />
     <WelcomeCard v-if="showPage === 'enter-name'" class="content-area" @goToPage="goToPage"/>
     <NewBoard
@@ -45,6 +46,9 @@ export default {
   sockets: {
     newBoardCreated(boardName) {
       this.boardNames.push(boardName);
+    },
+    updatedUsers(users) {
+      this.users = users;
     }
   },
   data() {
@@ -53,7 +57,8 @@ export default {
       board: undefined,
       user: undefined,
       showPage: "enter-name",
-      boardNames: []
+      boardNames: [],
+      users: []
     };
   },
   methods: {
@@ -80,6 +85,7 @@ export default {
       this.showPage = "enter-name";
     } else {
       this.user = user.name;
+      this.$socket.emit("createUser", user.name);
       if (!user.room) {
         this.showPage = "board-select";
       } else {

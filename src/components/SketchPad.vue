@@ -5,7 +5,7 @@
       <div class="title-bar">
         <div class="user-count centered-flex">
           <i class="fas fa-user fa-lg"></i>
-          <div class="count centered-flex">35</div>
+          <div class="count centered-flex">{{userCount}}</div>
         </div>
         <h2>{{board}}</h2>
       </div>
@@ -74,7 +74,8 @@ import { setTimeout } from "timers";
 export default {
   props: {
     board: String,
-    user: String
+    user: String,
+    users: Array
   },
   data() {
     return {
@@ -89,16 +90,6 @@ export default {
       size: 10,
       showPallet: false,
       deletedStrokes: [],
-      colorOptions: [
-        "#ff0000",
-        "#ffa500",
-        "#ffff00",
-        "#008000",
-        "#0000ff",
-        "#4b0082",
-        "#333333",
-        "#ffffff"
-      ],
       colorPicker: [
         "#FFCDD2",
         "#E1BEE7",
@@ -183,6 +174,9 @@ export default {
     },
     fullColor() {
       return this.color + Number(this.opacity).toString(16);
+    },
+    userCount() {
+      return this.users.filter(user => user.board === this.board).length;
     }
   },
   methods: {
@@ -193,6 +187,7 @@ export default {
       this.$emit("refresh");
       this.$emit("goToPage", page);
       storage.unsetRoom();
+      this.$socket.emit("leaveBoard", this.boardName);
     },
     setColor(color) {
       this.color = color;
