@@ -48,9 +48,11 @@ export default {
       this.boardNames.push(boardName);
     },
     updatedUsers(users) {
+      console.log("updated useres");
       this.users = users;
     },
-    connection() {
+    connect() {
+      console.log("connected!");
       this.startUp();
     }
   },
