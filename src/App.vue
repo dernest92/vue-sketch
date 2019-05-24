@@ -206,7 +206,7 @@ input {
     height: 35px;
     padding: 10px;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 15px;
   }
 }
 
