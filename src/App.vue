@@ -5,6 +5,7 @@
       id="sketch-pad"
       class="content-area"
       @goToPage="goToPage"
+      @refresh="setBoardNames"
       :board="board"
     />
     <WelcomeCard v-if="showPage === 'enter-name'" class="content-area" @goToPage="goToPage"/>
@@ -59,11 +60,16 @@ export default {
     },
     goToPage(page) {
       this.showPage = page;
+    },
+    setBoardNames() {
+      this.$socket.emit("getBoardNames", boardNames => {
+        console.log("set board names");
+        this.boardNames = boardNames;
+      });
     }
   },
   created() {
     const user = storage.getUser();
-    console.log("creaeted", user);
     if (!user) {
       this.showPage = "enter-name";
     } else {
@@ -74,10 +80,7 @@ export default {
         this.showPage = "sketch-pad";
       }
     }
-
-    this.$socket.emit("getBoardNames", boardNames => {
-      this.boardNames = boardNames;
-    });
+    this.setBoardNames();
   }
 };
 </script>

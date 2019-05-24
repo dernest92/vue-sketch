@@ -38,6 +38,9 @@ export default {
       this.$emit("goToBoard", boardName);
       this.goToPage("sketch-pad");
     }
+  },
+  created() {
+    this.$emit("refresh");
   }
 };
 </script>

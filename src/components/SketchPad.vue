@@ -113,6 +113,7 @@ export default {
   },
   methods: {
     goToPage(page) {
+      this.$emit("refresh");
       this.$emit("goToPage", page);
       storage.unsetRoom();
     },
@@ -122,22 +123,42 @@ export default {
     redo() {
       const revived = this.deletedStrokes.pop();
       this.strokes.push(revived);
-      this.$socket.emit("sendStroke", {
-        boardName: this.board,
-        stroke: revived
-      });
+      this.$socket.emit(
+        "sendStroke",
+        {
+          boardName: this.board,
+          stroke: revived
+        },
+        err => {
+          if (err) {
+            this.goToPage("board-select");
+            return console.log(err);
+          }
+        }
+      );
       this.drawStrokes();
     },
     back(sendSocket) {
       const removed = this.strokes.pop();
       this.deletedStrokes.push(removed);
-      if (sendSocket) this.$socket.emit("sendRemoveStroke", this.board);
+      if (sendSocket)
+        this.$socket.emit("sendRemoveStroke", this.board, err => {
+          if (err) {
+            this.goToPage("board-select");
+            return console.log(err);
+          }
+        });
       this.drawStrokes();
     },
     clear() {
       this.strokes = [];
       this.deletedStrokes = [];
-      this.$socket.emit("sendClearStrokes", this.board);
+      this.$socket.emit("sendClearStrokes", this.board, err => {
+        if (err) {
+          this.goToPage("board-select");
+          return console.log(err);
+        }
+      });
       this.drawStrokes();
     },
     setPosition(e) {
@@ -173,10 +194,19 @@ export default {
     },
     endStroke() {
       if (this.isDrawing) {
-        this.$socket.emit("sendStroke", {
-          boardName: this.board,
-          stroke: this.strokes[this.strokes.length - 1]
-        });
+        this.$socket.emit(
+          "sendStroke",
+          {
+            boardName: this.board,
+            stroke: this.strokes[this.strokes.length - 1]
+          },
+          err => {
+            if (err) {
+              this.goToPage("board-select");
+              return console.log(err);
+            }
+          }
+        );
       }
       this.isDrawing = false;
     },
