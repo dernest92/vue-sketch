@@ -2,8 +2,10 @@
   <div class="container">
     <div class="card">
       <div class="join-options">
-        <input type="text" placeholder="Your Name" v-model="newUserName">
-        <button @click="setUserName()">Enter</button>
+        <form @submit.prevent="setUserName">
+          <input type="text" placeholder="Your Name..." v-model="newUserName">
+          <button class="btn" type="submit">Enter</button>
+        </form>
       </div>
     </div>
   </div>
@@ -36,4 +38,7 @@ export default {
 
 
 <style lang="scss" scoped>
+.card {
+  padding: 20px 10px;
+}
 </style>

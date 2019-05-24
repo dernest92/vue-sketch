@@ -12,16 +12,16 @@
         @touchmove="continueStroke($event)"
       ></canvas>
       <div class="buttons">
-        <button class="btn" @click="goToPage('board-select')">
+        <button class="btn-round" @click="goToPage('board-select')">
           <i class="fas fa-door-open fa-lg"></i>
         </button>
-        <button class="btn" @click="back(true)" :disabled="!canUndo">
+        <button class="btn-round" @click="back(true)" :disabled="!canUndo">
           <i class="fas fa-undo fa-lg"></i>
         </button>
-        <button class="btn" @click="clear" :disabled="!canUndo">
+        <button class="btn-round" @click="clear" :disabled="!canUndo">
           <i class="fas fa-recycle fa-lg"></i>
         </button>
-        <button class="btn" @click="redo" :disabled="!canRedo">
+        <button class="btn-round" @click="redo" :disabled="!canRedo">
           <i class="fas fa-redo fa-lg"></i>
         </button>
       </div>
@@ -29,7 +29,7 @@
         <div class="brush-controls">
           <div class="color-control">
             <button
-              class="btn color-option"
+              class="btn-round color-option"
               v-for="color in colorOptions"
               @click="setColor(color)"
               :key="color"
@@ -52,6 +52,9 @@
 </template>
 
 <script>
+import storage from "../localstorage.js";
+import { setTimeout } from "timers";
+
 export default {
   props: {
     board: String
@@ -80,9 +83,6 @@ export default {
     };
   },
   sockets: {
-    connect() {
-      console.log("connected");
-    },
     msgToClients(msg) {
       console.log(msg);
     },
@@ -114,6 +114,7 @@ export default {
   methods: {
     goToPage(page) {
       this.$emit("goToPage", page);
+      storage.unsetRoom();
     },
     setColor(color) {
       this.color = color;
@@ -206,6 +207,7 @@ export default {
     this.$nextTick(() => {
       this.canvas = this.$refs["my-canvas"];
       this.context = this.canvas.getContext("2d");
+      console.log(this.board);
       this.$socket.emit("joinBoard", this.board, (err, strokes) => {
         this.strokes = strokes;
         this.drawStrokes();
@@ -268,31 +270,6 @@ export default {
 
   .brush-sample {
     border-radius: 50%;
-  }
-}
-
-.btn {
-  border: none;
-  background: rgba(256, 256, 256, 0.5);
-  cursor: pointer;
-  height: 35px;
-  width: 35px;
-  border-radius: 50%;
-  color: #333;
-  transition: all 0.35s;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: auto;
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0);
-  }
-
-  &.color-option {
-    height: 25px;
-    width: 25px;
-    border-radius: 8px;
-    margin: 2px;
   }
 }
 

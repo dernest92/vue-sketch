@@ -63,8 +63,16 @@ export default {
   },
   created() {
     const user = storage.getUser();
+    console.log("creaeted", user);
     if (!user) {
-      this.isLoggedIn = false;
+      this.showPage = "enter-name";
+    } else {
+      if (!user.room) {
+        this.showPage = "board-select";
+      } else {
+        this.board = user.room;
+        this.showPage = "sketch-pad";
+      }
     }
 
     this.$socket.emit("getBoardNames", boardNames => {
@@ -103,6 +111,9 @@ body {
 
 input {
   font-size: 16px;
+  padding: 4px 6px;
+  border-radius: 2px;
+  border: 1px rgba(0, 0, 0, 0.3) solid;
 }
 
 .container {
@@ -126,7 +137,7 @@ input {
   padding: 5px;
 }
 
-.btn {
+.btn-round {
   border: none;
   background: rgba(0, 0, 0, 0.2);
   cursor: pointer;
@@ -164,5 +175,17 @@ input {
   margin: 15px;
   padding: 20px 10px;
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  border-radius: 5px;
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 15px;
+  padding: 5px;
 }
 </style>

@@ -10,10 +10,15 @@ const getUser = () => {
 };
 
 const setRoom = roomName => {
-  console.log("set room", roomName);
   const user = getUser();
   user.room = roomName;
   setUser(user);
 };
 
-export default { setUser, getUser, setRoom };
+const unsetRoom = () => {
+  const user = getUser();
+  user.room = undefined;
+  setUser(user);
+};
+
+export default { setUser, getUser, setRoom, unsetRoom };

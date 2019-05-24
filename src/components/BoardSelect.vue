@@ -9,7 +9,7 @@
           class="join-option"
           @click="selectBoard(board)"
         >{{board}}</button>
-        <button @click="goToPage('enter-name')">Cancel</button>
+        <button class="btn" @click="goToPage('enter-name')">Log Out</button>
       </div>
     </div>
   </div>
