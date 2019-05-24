@@ -53,7 +53,9 @@ export default {
     },
     connect() {
       console.log("connected!");
-      this.startUp();
+    },
+    checkForLogin() {
+      // this.startUp();
     }
   },
   data() {

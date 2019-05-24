@@ -5,7 +5,6 @@ import VueSocketIO from "vue-socket.io";
 Vue.config.productionTip = false;
 console.log(process.env.VUE_APP_SOCKET_URL);
 
-// const url = "http://localhost:3000";
 const url = process.env.VUE_APP_SOCKET_URL;
 
 Vue.use(
