@@ -2,9 +2,11 @@
   <div class="container">
     <div class="card">
       <div class="join-options">
-        <input type="text" placeholder="Board Name..." v-model="newBoardName">
-        <button @click="startNewBoard">Submit</button>
-        <button @click="goToPage('join-type')">Cancel</button>
+        <form @submit.prevent="startNewBoard">
+          <input type="text" placeholder="Board Name..." v-model="newBoardName">
+          <button type="submit" class="btn">Submit</button>
+        </form>
+        <button class="btn" @click="goToPage('board-select')">Cancel</button>
       </div>
     </div>
   </div>
@@ -39,3 +41,8 @@ export default {
 };
 </script>
 
+<style scoped>
+.card {
+  padding: 20px 10px;
+}
+</style>

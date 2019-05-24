@@ -9,7 +9,7 @@
           class="join-option"
           @click="selectBoard(board)"
         >{{board}}</button>
-        <button class="btn" @click="goToPage('enter-name')">Log Out</button>
+        <button class="btn" @click="logOut">Log Out</button>
       </div>
     </div>
   </div>
@@ -26,6 +26,10 @@ export default {
     return {};
   },
   methods: {
+    logOut() {
+      this.goToPage("enter-name");
+      storage.unsetUser();
+    },
     goToPage(page) {
       this.$emit("goToPage", page);
     },

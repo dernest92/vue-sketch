@@ -21,4 +21,8 @@ const unsetRoom = () => {
   setUser(user);
 };
 
-export default { setUser, getUser, setRoom, unsetRoom };
+const unsetUser = () => {
+  localStorage.removeItem("user");
+};
+
+export default { setUser, getUser, setRoom, unsetRoom, unsetUser };
