@@ -49,6 +49,9 @@ export default {
     },
     updatedUsers(users) {
       this.users = users;
+    },
+    connection() {
+      this.startUp();
     }
   },
   data() {
@@ -77,23 +80,26 @@ export default {
         console.log("set board names");
         this.boardNames = boardNames;
       });
+    },
+    startUp() {
+      const user = storage.getUser();
+      if (!user) {
+        this.showPage = "enter-name";
+      } else {
+        this.user = user.name;
+        this.$socket.emit("createUser", user.name);
+        if (!user.room) {
+          this.showPage = "board-select";
+        } else {
+          this.board = user.room;
+          this.showPage = "sketch-pad";
+        }
+      }
+      this.setBoardNames();
     }
   },
   created() {
-    const user = storage.getUser();
-    if (!user) {
-      this.showPage = "enter-name";
-    } else {
-      this.user = user.name;
-      this.$socket.emit("createUser", user.name);
-      if (!user.room) {
-        this.showPage = "board-select";
-      } else {
-        this.board = user.room;
-        this.showPage = "sketch-pad";
-      }
-    }
-    this.setBoardNames();
+    this.startUp();
   }
 };
 </script>
