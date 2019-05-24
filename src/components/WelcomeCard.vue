@@ -37,6 +37,7 @@ export default {
     setUserName() {
       const id = Math.ceil(Math.random() * 1000000);
       storage.setUser({ name: this.newUserName, id });
+      this.$emit("setName", this.newUserName);
       this.$emit("goToPage", "board-select");
     },
     setMenuState(state) {

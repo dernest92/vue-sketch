@@ -7,6 +7,7 @@
       @goToPage="goToPage"
       @refresh="setBoardNames"
       :board="board"
+      :user="user"
     />
     <WelcomeCard v-if="showPage === 'enter-name'" class="content-area" @goToPage="goToPage"/>
     <NewBoard
@@ -14,6 +15,7 @@
       @goToPage="goToPage"
       class="content-area"
       @goToBoard="goToBoard"
+      @setName="setName"
     />
     <BoardSelect
       v-if="showPage === 'board-select'"
@@ -49,11 +51,15 @@ export default {
     return {
       isLoggedIn: false,
       board: undefined,
+      user: undefined,
       showPage: "enter-name",
       boardNames: []
     };
   },
   methods: {
+    setName(name) {
+      this.user = name;
+    },
     goToBoard(board) {
       this.isLoggedIn = true;
       this.board = board;
@@ -73,6 +79,7 @@ export default {
     if (!user) {
       this.showPage = "enter-name";
     } else {
+      this.user = user.name;
       if (!user.room) {
         this.showPage = "board-select";
       } else {
@@ -272,5 +279,11 @@ p {
     // font-weight: bold;
     letter-spacing: 1px;
   }
+}
+
+.centered-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

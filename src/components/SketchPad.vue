@@ -2,6 +2,13 @@
   <div class="container" @mouseup="endStroke" @touchend="endStroke">
     <div class="card card-sketch">
       <div v-show="showPallet" class="shadow-overlay" @click="setPallet(false)"></div>
+      <div class="title-bar">
+        <div class="user-count centered-flex">
+          <i class="fas fa-user fa-lg"></i>
+          <div class="count centered-flex">35</div>
+        </div>
+        <h2>{{board}}</h2>
+      </div>
       <canvas
         id="sketch-area"
         ref="my-canvas"
@@ -66,7 +73,8 @@ import { setTimeout } from "timers";
 
 export default {
   props: {
-    board: String
+    board: String,
+    user: String
   },
   data() {
     return {
@@ -298,14 +306,18 @@ export default {
       this.canvas = this.$refs["my-canvas"];
       this.context = this.canvas.getContext("2d");
       console.log(this.board);
-      this.$socket.emit("joinBoard", this.board, (err, strokes) => {
-        if (err) {
-          this.goToPage("board-select");
-          return console.log(err);
+      this.$socket.emit(
+        "joinBoard",
+        { boardName: this.board, user: this.user },
+        (err, strokes) => {
+          if (err) {
+            this.goToPage("board-select");
+            return console.log(err);
+          }
+          this.strokes = strokes;
+          this.drawStrokes();
         }
-        this.strokes = strokes;
-        this.drawStrokes();
-      });
+      );
     });
   }
 };
@@ -433,5 +445,37 @@ export default {
   left: 0;
   top: 0;
   border-radius: 5px;
+  z-index: 10;
+}
+.title-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .user-count {
+    z-index: 2;
+    position: absolute;
+    background: #ccc;
+    border-radius: 8px;
+    justify-content: space-evenly;
+    padding: 5px;
+
+    i {
+      margin: 5px;
+      margin-right: 10px;
+    }
+    .count {
+      width: 35px;
+      height: 25px;
+      border-radius: 5px;
+      font-weight: bold;
+      background: #f4f4f4;
+    }
+  }
+
+  h2 {
+    margin: 10px;
+    width: 100%;
+  }
 }
 </style>
