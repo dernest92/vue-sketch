@@ -209,6 +209,10 @@ export default {
       this.context = this.canvas.getContext("2d");
       console.log(this.board);
       this.$socket.emit("joinBoard", this.board, (err, strokes) => {
+        if (err) {
+          this.goToPage("board-select");
+          return console.log(err);
+        }
         this.strokes = strokes;
         this.drawStrokes();
       });
