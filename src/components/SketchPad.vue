@@ -12,7 +12,7 @@
         @touchmove="continueStroke($event)"
       ></canvas>
       <div class="buttons">
-        <button class="btn" @click="goToPage('join-type')">
+        <button class="btn" @click="goToPage('board-select')">
           <i class="fas fa-door-open fa-lg"></i>
         </button>
         <button class="btn" @click="back(true)" :disabled="!canUndo">

@@ -8,15 +8,14 @@
       :board="board"
     />
     <WelcomeCard v-if="showPage === 'enter-name'" class="content-area" @goToPage="goToPage"/>
-    <JoinType v-if="showPage === 'join-type'" @goToPage="goToPage" class="content-area"/>
     <NewBoard
       v-if="showPage === 'new-board'"
       @goToPage="goToPage"
       class="content-area"
       @goToBoard="goToBoard"
     />
-    <ExistingBoards
-      v-if="showPage === 'existing-boards'"
+    <BoardSelect
+      v-if="showPage === 'board-select'"
       class="content-area"
       :boardNames="boardNames"
       @goToPage="goToPage"
@@ -28,18 +27,17 @@
 <script>
 import SketchPad from "./components/SketchPad.vue";
 import WelcomeCard from "./components/WelcomeCard.vue";
-import JoinType from "./components/JoinType.vue";
+
 import NewBoard from "./components/NewBoard.vue";
-import ExistingBoards from "./components/ExistingBoards.vue";
+import BoardSelect from "./components/BoardSelect.vue";
 import storage from "./localstorage.js";
 export default {
   name: "app",
   components: {
     SketchPad,
     WelcomeCard,
-    JoinType,
     NewBoard,
-    ExistingBoards
+    BoardSelect
   },
   sockets: {
     newBoardCreated(boardName) {

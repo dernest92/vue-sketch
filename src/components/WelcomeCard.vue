@@ -24,7 +24,7 @@ export default {
   methods: {
     setUserName() {
       storage.setUser({ name: this.newUserName });
-      this.$emit("goToPage", "join-type");
+      this.$emit("goToPage", "board-select");
     },
     setMenuState(state) {
       console.log(state);
