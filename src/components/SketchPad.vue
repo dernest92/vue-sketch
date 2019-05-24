@@ -123,19 +123,7 @@ export default {
     redo() {
       const revived = this.deletedStrokes.pop();
       this.strokes.push(revived);
-      this.$socket.emit(
-        "sendStroke",
-        {
-          boardName: this.board,
-          stroke: revived
-        },
-        err => {
-          if (err) {
-            this.goToPage("board-select");
-            return console.log(err);
-          }
-        }
-      );
+      this.emitStroke(revived);
       this.drawStrokes();
     },
     back(sendSocket) {
@@ -194,21 +182,24 @@ export default {
     },
     endStroke() {
       if (this.isDrawing) {
-        this.$socket.emit(
-          "sendStroke",
-          {
-            boardName: this.board,
-            stroke: this.strokes[this.strokes.length - 1]
-          },
-          err => {
-            if (err) {
-              this.goToPage("board-select");
-              return console.log(err);
-            }
-          }
-        );
+        this.emitStroke(this.strokes[this.strokes.length - 1]);
       }
       this.isDrawing = false;
+    },
+    emitStroke(stroke) {
+      this.$socket.emit(
+        "sendStroke",
+        {
+          boardName: this.board,
+          stroke
+        },
+        err => {
+          if (err) {
+            this.goToPage("board-select");
+            return console.log(err);
+          }
+        }
+      );
     },
     drawStrokes() {
       const canvas = this.canvas;

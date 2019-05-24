@@ -246,4 +246,30 @@ h2 {
 p {
   margin-bottom: 8px;
 }
+.input-with-addon {
+  display: flex;
+  width: 100%;
+  height: 30px;
+  // border: 1px rgba(0, 0, 0, 0.3) solid;
+  overflow: hidden;
+  border-radius: 5px;
+
+  input {
+    height: 100%;
+    border: none;
+  }
+
+  .input-addon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #555;
+    width: 75px;
+    height: 100%;
+    color: #f4f4f4;
+    font-size: 14px;
+    // font-weight: bold;
+    letter-spacing: 1px;
+  }
+}
 </style>

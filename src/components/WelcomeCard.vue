@@ -4,7 +4,16 @@
       <h2>Welcome!</h2>
       <div class="join-options">
         <form @submit.prevent="setUserName">
-          <input type="text" placeholder="Enter Your Name..." v-model="newUserName" required>
+          <div class="input-with-addon">
+            <input
+              type="text"
+              placeholder="Enter Your Name..."
+              v-model="newUserName"
+              required
+              maxlength="25"
+            >
+            <div class="input-addon">{{newUserName.length}}/25</div>
+          </div>
           <button class="btn bg-green clr-white" type="submit">Enter</button>
         </form>
       </div>
@@ -18,7 +27,7 @@ export default {
   data() {
     return {
       menuState: "default",
-      newUserName: undefined,
+      newUserName: "",
       boardNames: []
     };
   },
@@ -26,7 +35,8 @@ export default {
   computed: {},
   methods: {
     setUserName() {
-      storage.setUser({ name: this.newUserName });
+      const id = Math.ceil(Math.random() * 1000000);
+      storage.setUser({ name: this.newUserName, id });
       this.$emit("goToPage", "board-select");
     },
     setMenuState(state) {
