@@ -1,16 +1,25 @@
 <template>
   <div class="container">
     <div class="card">
-      <div class="join-options">
-        <button class="join-option" @click="goToPage('new-board')">Create a new board</button>
-        <button
-          v-for="board in boardNames"
-          :key="board"
-          class="join-option"
-          @click="selectBoard(board)"
-        >{{board}}</button>
-        <button class="btn" @click="logOut">Log Out</button>
-      </div>
+      <h2>Choose a Board</h2>
+      <button class="join-option" @click="goToPage('new-board')">
+        <div class="join-icon">
+          <i class="far fa-plus-square fa-lg"></i>
+        </div>
+        <div class="join-text">Create a new board</div>
+      </button>
+      <button
+        v-for="board in boardNames"
+        :key="board"
+        class="join-option"
+        @click="selectBoard(board)"
+      >
+        <div class="join-icon">
+          <i class="far fa-edit fa-lg clr-white"></i>
+        </div>
+        <div class="join-text">{{board}}</div>
+      </button>
+      <button class="btn bg-red clr-white" @click="logOut">Log Out</button>
     </div>
   </div>
 </template>

@@ -117,6 +117,7 @@ input {
   padding: 4px 6px;
   border-radius: 2px;
   border: 1px rgba(0, 0, 0, 0.3) solid;
+  width: 100%;
 }
 
 .container {
@@ -130,7 +131,16 @@ input {
   background: #f4f4f4;
   padding: 5px;
   border-radius: 8px;
-  box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  width: 80vw;
+  max-width: 400px;
+  padding: 15px;
+
+  &-sketch {
+    width: fit-content;
+    max-width: 100%;
+    padding: 5px;
+  }
 }
 
 .buttons {
@@ -171,13 +181,33 @@ input {
 }
 
 .join-option {
-  display: block;
-  max-width: 300px;
-  width: 70vw;
-  background: #fff;
-  margin: 15px;
-  padding: 20px 10px;
-  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+  display: flex;
+  width: 100%;
+  background: #ccc;
+  margin: 15px 0;
+  border: none;
+  border-radius: 5px;
+  overflow: hidden;
+
+  .join-icon {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #32ff7e;
+    background: #555;
+  }
+
+  .join-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 35px;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 14px;
+  }
 }
 
 .btn {
@@ -189,6 +219,31 @@ input {
   margin-top: 10px;
   font-weight: bold;
   font-size: 15px;
-  padding: 5px;
+  padding: 10px 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.bg-green {
+  background: #2ecc71;
+}
+
+.bg-red {
+  background: #e74c3c;
+}
+
+.clr-white {
+  color: #fff;
+}
+
+.clr-orange {
+  color: #ff9770;
+}
+
+h2 {
+  margin-bottom: 10px;
+}
+p {
+  margin-bottom: 8px;
 }
 </style>

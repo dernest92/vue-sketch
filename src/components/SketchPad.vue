@@ -1,6 +1,6 @@
 <template>
   <div class="container" @mouseup="endStroke" @touchend="endStroke">
-    <div class="card">
+    <div class="card card-sketch">
       <canvas
         id="sketch-area"
         ref="my-canvas"
@@ -276,13 +276,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.card {
-  background: #f4f4f4;
-  padding: 5px;
-  border-radius: 8px;
-  box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.2);
 }
 
 .buttons {
