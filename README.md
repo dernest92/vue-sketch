@@ -1,4 +1,10 @@
-# vue-sketch
+# Sketch API
+
+This vue SPA is to be used in conjunction with the [sketch-api](https://github.com/dernest92/sketch-api).
+
+# Demo
+
+A live demo for this app can be found [here](https://drawn-together.davidernest.io/)
 
 ## Project setup
 ```
@@ -15,15 +21,3 @@ npm run serve
 npm run build
 ```
 
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
